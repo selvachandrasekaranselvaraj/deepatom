@@ -4,3 +4,5 @@ Descriptors Calculation: Computes a range of atomic descriptors such as Coulomb 
 Graph Neural Networks (GNNs): Implements a GNN model for predicting properties based on atomic structures.
 Utilities: Provides functions to handle LAMMPS output trajectory files and convert them into formats suitable for descriptor calculations.
 Training and Prediction: Allows training of GNN models and prediction of material properties with saved models.
+
+Test line for GNN
