@@ -1,6 +1,6 @@
 import torch
 import torch.nn.functional as F
-from deepatom.utils import read_lammps_trajectory, convert_to_ase_atoms
+from deepatom.utils import read_lammps_trajectory
 from deepatom.descriptors import (
     calculate_coulomb_matrix,
     sine_matrix,
@@ -16,10 +16,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 class DeepAtom:
-    def __init__(self, trajectory_file, atomic_numbers, lattice_vectors):
-        self.trajectory_file = trajectory_file
-        self.atomic_numbers = atomic_numbers
-        self.lattice_vectors = lattice_vectors
+    def __init__(self):
+        self.atoms = None
+        self.trajectory_file = None
+        self.atomic_numbers = None
+        self.lattice_vectors = None
         self.positions = None
         self.atoms = None
         self.structure = None
@@ -27,14 +28,16 @@ class DeepAtom:
         self.scaler = None
 
     def load_data(self):
-        self.positions = read_lammps_trajectory(self.trajectory_file)
-        self.atoms = convert_to_ase_atoms(self.positions, self.atomic_numbers, self.lattice_vectors)
+        self.atoms = read_lammps_trajectory()
+        self.atomic_numbers = np.array([atom.numbers for atom in self.atoms])
+        self.lattice_vectors = np.array([atom.cell for atom in self.atoms] )     
+        self.positions = np.array([atom.positions for atom in self.atoms])
         self.structure = Structure(self.lattice_vectors, self.atomic_numbers, self.positions)
 
     def calculate_descriptors(self):
-        self.cm_matrix = calculate_coulomb_matrix(self.structure)
-        self.sine_mat = sine_matrix(self.positions)
-        self.ewald_matrix = calculate_ewald_sum(self.structure)
+        #self.cm_matrix = calculate_coulomb_matrix(self.structure)
+        #self.sine_mat = sine_matrix(self.positions)
+        #self.ewald_matrix = calculate_ewald_sum(self.structure)
         self.acsf_descriptors = calculate_acsf(self.atoms)
         self.soap_descriptors = calculate_soap_descriptors(self.atoms)
         self.mbtr_features = calculate_mbtr_descriptors(self.positions, self.atomic_numbers)

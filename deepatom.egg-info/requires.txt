@@ -1,0 +1,8 @@
+numpy
+pymatgen
+gemd
+ase
+mbtr
+torch
+torch-geometric
+lammps

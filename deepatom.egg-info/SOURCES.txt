@@ -1,0 +1,15 @@
+README.md
+setup.py
+deepatom/__init__.py
+deepatom/descriptors.py
+deepatom/gnn.py
+deepatom/main.py
+deepatom/utils.py
+deepatom.egg-info/PKG-INFO
+deepatom.egg-info/SOURCES.txt
+deepatom.egg-info/dependency_links.txt
+deepatom.egg-info/entry_points.txt
+deepatom.egg-info/requires.txt
+deepatom.egg-info/top_level.txt
+tests/__init__.py
+tests/test_descriptors.py

@@ -1,0 +1,2 @@
+[console_scripts]
+deepatom = deepatom.main:main
