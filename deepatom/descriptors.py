@@ -95,4 +95,4 @@ def calculate_soap(structure, species):
         sigma=0.2,
         sparse=False,
     )
-    return soap.create(structure)ure)
+    return soap.create(structure)
