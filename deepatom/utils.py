@@ -1,8 +1,9 @@
 import numpy as np
+import sys
 from ase import Atoms
 from ase.io import read
     
-def read_lammps_trajectory(dump_file):
+def read_lammps_trajectory():
     '''
     Reads a LAMMPS trajectory file, skipping an initial number of frames based on the total number of frames.
 
@@ -10,10 +11,10 @@ def read_lammps_trajectory(dump_file):
     '''
     #For testing, you can provide the input_file as a command line argument
     try:
-        input_file = dump_file #sys.argv[1]
+        input_file = sys.argv[1]
     except:
         print("Input error!!!!")
-        print("Usage: \"autopsy lammps_traj_file  \"")
+        print("Usage: \"deepatom lammps_traj_file  \"")
         print()
         exit()
     # For demonstration purposes, using fixed input_file

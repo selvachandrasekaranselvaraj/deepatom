@@ -2,45 +2,45 @@ import torch
 import torch.nn.functional as F
 from deepatom.utils import read_lammps_trajectory
 from deepatom.descriptors import (
-    calculate_coulomb_matrix,
-    sine_matrix,
-    calculate_ewald_sum,
+    #calculate_coulomb_matrix,
+    #sine_matrix,
+    #calculate_ewald_sum,
     calculate_acsf,
-    calculate_soap_descriptors,
-    calculate_mbtr_descriptors
+    calculate_soap,
+    #calculate_mbtr_descriptors
 )
-from deepatom.gnn import structure_to_graph, GNNModel
+#from deepatom.gnn import structure_to_graph, GNNModel
 import numpy as np
 from pymatgen.core import Structure
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-class DeepAtom:
+class DeepAtom():
     def __init__(self):
-        self.atoms = None
-        self.trajectory_file = None
+        self.structures = None
         self.atomic_numbers = None
         self.lattice_vectors = None
         self.positions = None
-        self.atoms = None
-        self.structure = None
         self.model = None
         self.scaler = None
 
     def load_data(self):
-        self.atoms = read_lammps_trajectory()
-        self.atomic_numbers = np.array([atom.numbers for atom in self.atoms])
-        self.lattice_vectors = np.array([atom.cell for atom in self.atoms] )     
-        self.positions = np.array([atom.positions for atom in self.atoms])
-        self.structure = Structure(self.lattice_vectors, self.atomic_numbers, self.positions)
+        self.structures = read_lammps_trajectory()
+        self.atomic_numbers = np.array([atom.numbers for atom in self.structures])
+        self.chemical_species = np.array([atom.get_chemical_symbols() for atom in self.structures])
+        self.lattice_vectors = np.array([atom.cell for atom in self.structures] )     
+        self.positions = np.array([atom.positions for atom in self.structures])
+        #self.structure = Structure(self.lattice_vectors, self.atomic_numbers, self.positions)
 
     def calculate_descriptors(self):
         #self.cm_matrix = calculate_coulomb_matrix(self.structure)
         #self.sine_mat = sine_matrix(self.positions)
         #self.ewald_matrix = calculate_ewald_sum(self.structure)
-        self.acsf_descriptors = calculate_acsf(self.atoms)
-        self.soap_descriptors = calculate_soap_descriptors(self.atoms)
-        self.mbtr_features = calculate_mbtr_descriptors(self.positions, self.atomic_numbers)
+        #self.mbtr_features = calculate_mbtr_descriptors(self.positions, self.atomic_numbers)
+        self.acsf_descriptors = calculate_acsf(self.structures, self.atomic_numbers[0])
+        self.soap_descriptors = calculate_soap(self.structures, self.atomic_numbers[0])
+        print(np.array(self.soap_descriptors).shape)
+        print(np.array(self.acsf_descriptors).shape)
 
     def prepare_data_for_training(self):
         self.descriptors = np.concatenate([
@@ -109,17 +109,17 @@ class DeepAtom:
 
 def main():
     # Define your parameters
-    trajectory_file = 'your_trajectory_file.lmp'  # Replace with your LAMMPS trajectory file path
-    atomic_numbers = np.array([13, 8, 13])  # Example atomic numbers
-    lattice_vectors = np.eye(3)  # Replace with actual lattice vectors
+    #trajectory_file = 'your_trajectory_file.lmp'  # Replace with your LAMMPS trajectory file path
+    #atomic_numbers = np.array([13, 8, 13])  # Example atomic numbers
+    #lattice_vectors = np.eye(3)  # Replace with actual lattice vectors
 
-    deepatom = DeepAtom(trajectory_file, atomic_numbers, lattice_vectors)
+    deepatom = DeepAtom()
     deepatom.load_data()
     deepatom.calculate_descriptors()
-    deepatom.prepare_data_for_training()
-    deepatom.train(epochs=10, learning_rate=0.001)
-    deepatom.predict()
-    deepatom.print_results()
+    #deepatom.prepare_data_for_training()
+    #deepatom.train(epochs=10, learning_rate=0.001)
+    #deepatom.predict()
+    #deepatom.print_results()
 
 if __name__ == "__main__":
     main()
