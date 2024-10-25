@@ -18,7 +18,7 @@ def read_lammps_trajectory():
         print()
         exit()
     # For demonstration purposes, using fixed input_file
-    #input_file = 'd.lmp'
+    #input_file = 'd.lmp' input file will be prompted from terminal
 
     print(f'Reading {input_file}...')
 
