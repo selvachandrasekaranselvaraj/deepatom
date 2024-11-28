@@ -109,7 +109,7 @@ class DeepAtom():
         print("MBTR Descriptors:\n", self.mbtr_features)
 
 def main():
-    # Define your parameters and constants
+    # Define your parameters 
     #trajectory_file = 'your_trajectory_file.lmp'  # Replace with your LAMMPS trajectory file path
     #atomic_numbers = np.array([13, 8, 13])  # Example atomic numbers
     #lattice_vectors = np.eye(3)  # Replace with actual lattice vectors
