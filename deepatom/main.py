@@ -10,7 +10,7 @@ from deepatom.descriptors import (
     calculate_soap,
     #calculate_mbtr_descriptors
 )
-#from deepatom.gnn import structure_to_graph, GNNModel
+from deepatom.gnn import structure_to_graph, GNNModel
 import numpy as np
 from pymatgen.core import Structure
 from sklearn.model_selection import train_test_split
@@ -45,12 +45,12 @@ class DeepAtom():
 
     def prepare_data_for_training(self):
         self.descriptors = np.concatenate([
-            self.cm_matrix.flatten(),
-            self.sine_mat.flatten(),
-            self.ewald_matrix.flatten(),
+            #self.cm_matrix.flatten(),
+            #self.sine_mat.flatten(),
+            #self.ewald_matrix.flatten(),
             self.acsf_descriptors.flatten(),
             self.soap_descriptors.flatten(),
-            self.mbtr_features.flatten()
+            #self.mbtr_features.flatten()
         ])
         # Example labels, replace with actual labels if available
         self.labels = np.random.randint(0, 2, size=(self.descriptors.shape[0],))  # Binary classification
@@ -60,8 +60,8 @@ class DeepAtom():
 
         # Scale features
         self.scaler = StandardScaler()
-        X_train = self.scaler.fit_transform(X_train)
-        X_test = self.scaler.transform(X_test)
+        X_train = self.scaler.fit_transform(X_train.reshape(-1, 1))
+        X_test = self.scaler.transform(X_test.reshape(-1, 1))
         
         self.train_data = torch.tensor(X_train, dtype=torch.float32)
         self.train_labels = torch.tensor(y_train, dtype=torch.long)
@@ -109,7 +109,7 @@ class DeepAtom():
         print("MBTR Descriptors:\n", self.mbtr_features)
 
 def main():
-    # Define your parameters
+    # Define your parameters and constants
     #trajectory_file = 'your_trajectory_file.lmp'  # Replace with your LAMMPS trajectory file path
     #atomic_numbers = np.array([13, 8, 13])  # Example atomic numbers
     #lattice_vectors = np.eye(3)  # Replace with actual lattice vectors
@@ -117,10 +117,10 @@ def main():
     deepatom = DeepAtom()
     deepatom.load_data()
     deepatom.calculate_descriptors()
-    #deepatom.prepare_data_for_training()
-    #deepatom.train(epochs=10, learning_rate=0.001)
-    #deepatom.predict()
-    #deepatom.print_results()
+    deepatom.prepare_data_for_training()
+    deepatom.train(epochs=10, learning_rate=0.001)
+    deepatom.predict()
+    deepatom.print_results()
 
 if __name__ == "__main__":
     main()
